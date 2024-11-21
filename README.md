@@ -1,16 +1,16 @@
-# ROP 汇编器
+# ROP Assembler
 
-## 简介
+## Introduction
 
-汇编器(asm.py) python编写完成，可以极大程度简化ROP编写过程
+The assembler (asm.py) is written in Python and can greatly simplify the process of writing ROP.
 
-## 用法
+## Usage
 
 ### Windows
 ```
 python .exe .\asm.py xxx
 ```
-例子:
+Example:
 ```
 python.exe .\asm.py .\Examples\Single-Line-Print.asm
 ```
@@ -18,20 +18,10 @@ python.exe .\asm.py .\Examples\Single-Line-Print.asm
 ```
 python ./asm.py xxx
 ```
-例子:
+Example:
 ```
 python ./asm.py ./Examples/Single-Line-Print.asm
 ```
 
-## ROP示例(汇编器参考语法)
-
-- [单行拼字](./Examples/Single-Line-Print.asm)  
-- [双行拼字](./Examples/Double-Line-Print.asm)
-- [三行拼字](./Examples/Triple-Line-Print.asm)
-- [循环/按键/拼字](./Examples/Loop.asm)
-- [无限字符滚动拼字（需要预先持久化数据）](./Examples/RollingPrint.asm)
-
-## ROP持久化保存
-- 什么？你嫌打一遍ROP拼字耗时太长？   
-- 那就试试持久化你的ROP(关机不会消失！！)，每次只需少量代码即可
-- [数据持久化](./Examples/Persistence/DataPersistence.md)
+## Note
+This is a forked version of Qiufuyu ROP compiler ( graveyard )

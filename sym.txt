@@ -1,0 +1,120 @@
+; content here is used for assembler to work
+; MODIFY CAREFULLY!
+
+09450       memcpy
+09d3a       memset
+203C8       smart_strcpy
+203D6       smart_strcat
+@203B8       smart_strlen 
+23f62       line_print
+23dcc       smallprint
+23d14       line_print_col0
+
+23d1e       line_print_Col3
+@23dc8       printline 
+099d2       printmultiline
+
+24010        hex_byte
+
+@09470       render_e3d4
+@0947c       render_ddd4
+@0947c       flush_screen
+
+@09d34       memzero
+
+@26086       reset_routine
+
+24bd6       get_string_constant
+@08c0c       fill_screen
+23DDE       waitkey
+@1F24E       read_key
+
+29892       key_cvt  
+
+1197c       setlr_cmp
+
+@09f3a       delay
+0a1ce       _start
+293d8       main
+
+@09440       buf1_to_buf2
+
+2ab26       byte_strlen
+
+@23c4c       diagnostic_mode
+@23cb4       diagnostic
+
+
+@2edc8       line_print__call__
+
+@0904c       char_print_1byte
+@09056       char_print
+
+
+09318       char_get_l14
+0a16a       zero_KO
+
+08c60       buffer_clear
+
+09238		char_get_14      
+09de6       assign_var
+; er0: char, er2: output adr
+08c0e       screencls
+
+[GADGETS]
+0c790       cmp_gt
+13b9a       load_table
+09e80       mov er0,sp 
+2ac30       mov r1,0
+0ac5a       sub r0,r8,pop er8
+09c9c       er2+=er10,r0=0,[er8]+=er2,pop xr8
+09fa8       setlr
+09ca2       er2+=er10,st er2,[er8],pop xr8
+09c9e       r0=0,[er8]+=er2,pop xr8
+203D2	    st r2,[er0]
+18d34       *er0=r2,r0=0
+130a4       pop QR0
+12602       pop er0
+18974       pop er2
+17b34       pop xr0
+183a6       pop xr8
+250a6       pop er4
+0a8a6       pop er8
+12da8       pop qr8
+21636       pop er12
+15c78       pop ER14
+0ac3a       pop xr4,pop qr8
+20d60       jpop er14
+12da6       jpop qr8
+23f82       jpop qr80
+27568       mov r0,r11,jpop xr4,qr8
+0a8a8       nop
+0ac30       ENTER
+0ac38       LEAVE
+13b9e       l er0,[er2]
+139d8       st er2,[er0]
+13b6a       L er8,[er0]
+18274       l r0,[er0]
+15fde       mov r2,r0,pop er0
+1e60c       mov er0,1
+0a88a       mov er2,1
+1DD54       mov r0,0
+18978       mov r0,0,pop er2
+0BF30       mov er0,er2
+14bd6       mov er2,er0
+2470a       mov er0,er4,pop er4
+2fa0c       add er0,er2
+122d4       or r0,r1
+1bb5c       sll r0,4
+
+2abda       cif
+13b80       add er4,er0
+17cac       lea [er12]
+203d2       st r2,[er0]
+1cb0e       st r2,[ea+]
+204e6       st r2,[ea+], pop xr4, pop qr8
+1dae8       and r0,15
+1a6c8       and r1,15
+20840       and r1, 15, sll r0, 4, or r1, r0
+17b32       mov er14,er0,pop xr0
+09ca4       st er2,[er8],pop xr8

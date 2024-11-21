@@ -25,6 +25,10 @@ class BinMap():
         else:
             raise Exception("Invalid arguments for BinMap!")
     
+    def calculate_program_length(self):
+        return self.largest_addr - self.lowest_addr + 1
+
+
     def die(self,text):
         print('\033[38;2;255;0;0m' + 'Memory-arrangement Error!' + '\033[0m')
         print('\033[33m'+'--> \033[34m'+text+'\033[0m')
@@ -196,38 +200,80 @@ class ROPAssembler():
             if segs[len(segs)-1] == '{':
                 self.parent_seg_addr = old_addr
     
-    def consume_adr(self,src):
+    def consume_adr(self, src):
         segs = self.consume_line(src)
         if len(segs) == 0:
             if self.is_second_pass:
-                self.output.append_adr(self.segment_addr,self.segment_addr)
-            self.segment_addr+=2
+                self.output.append_adr(self.segment_addr, self.segment_addr)
+            self.segment_addr += 2
             return
+        
         name = segs[0]
-        lb_find = ['',0]
+        lb_find = ['', 0]
+        # Check for parentheses indicating a calculation
+        if '(' in name and ')' in " ".join(segs):
+            # Extract the content within parentheses
+            after = " ".join(segs)
+            inner_expr = after[after.index('(') + 1:after.index(')')].strip()
+            # Split the expression by spaces to find the labels and operator
+            parts = inner_expr.split()
+            if len(parts) != 3:
+                self.die('Invalid expression format. Expected format: (label1 operator label2)')
+            
+            label1, operator, label2 = parts
+            
+            # Remove any surrounding whitespace and parentheses from labels
+            label1 = label1.strip()
+            label2 = label2.strip()
+            print("Label1: " + label1)  # Debugging
+            print("Operator: " + operator)  # Debugging
+            print("Label2: " + label2)  # Debugging
+            # Find the addresses of the labels
+            addr1 = self.find_label_address(label1)
+            addr2 = self.find_label_address(label2)
+            print("Address 1: " + str(addr1))  # Debugging
+            print("Address 2: " + str(addr2))  # Debugging
+            # Perform the operation based on the operator
+            if operator == '-':
+                result_addr = addr1 - addr2
+            elif operator == '+':
+                result_addr = addr1 + addr2
+            else:
+                self.die('Unsupported operator. Use "+" or "-".')
+            
+            # Append the result address to the output
+            if self.is_second_pass:
+                self.output.append_adr(result_addr, self.segment_addr)
+            self.segment_addr += 2
+            return
+        
+        # Normal label or number processing
         for i in self.labels:
             if i[0] == name:
                 lb_find = i
                 break
-        if lb_find[0]=='':
+        
+        if lb_find[0] == '':
             # may be it is a number
             try:
-                num = int(name)
+                if name.startswith('0x'):
+                    num = int(name, 16)  # Convert from hex to int
+                else:
+                    num = int(name)  # Convert from decimal to int
                 if self.is_second_pass:
-                    self.output.append_adr(num+self.segment_addr,self.segment_addr)
-                self.segment_addr+=2
+                    self.output.append_adr(num + self.segment_addr, self.segment_addr)
+                self.segment_addr += 2
                 return
             except Exception as e:
-                self.die('Cannot find label: '+name)
-            
-        addr = lb_find[1]
-        if len(segs)>1:
-            offset = int(segs[1])
-            addr += offset
-        if self.is_second_pass:
-            self.output.append_adr(addr,self.segment_addr)
-        self.segment_addr+=2
-        
+                self.die('Cannot find label: ' + name)
+
+    def find_label_address(self, label_name):
+        """Helper function to find the address of a label."""
+        for label in self.labels:
+            if label[0] == label_name:
+                return int(label[1])  # Return the address as an integer
+        self.die('Label not found: ' + label_name)
+    
     def solve_sym(self, src:str,sep = ''):
         if src.startswith('[') and src.endswith(']'):
             return ['',0]

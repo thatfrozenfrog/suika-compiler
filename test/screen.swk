@@ -10,7 +10,7 @@ home:
     setlr
     buffer_clear
     pop er2 (adr xy)
-    er0=[er2],r2 = 9,rt
+    er0 = [er2],r2 = 9,rt
     pop er2( 08 08 )
 render:
     render_bitmap
@@ -31,7 +31,7 @@ restore:
     pop xr0
     adr length
     hex 31 30
-    [er0]=er2,rt
+    [er0] = er2,rt
     pop qr0
     adr (addr - home)
     adr dest

@@ -1,0 +1,46 @@
+def 18932 memcpy_indr
+def 2F5F0 getkey
+def @09846 render_bitmap
+
+def d_F00C xy
+
+org 0xe9e0
+backup:
+    pop xr0 (d830 adr home)
+    BL memcpy,pop er0
+    pr_length
+
+no_cursor:
+    pop xr0 (d113 01 30)
+    [er0] = r2
+
+    setlr
+    buffer_clear
+
+home:
+    pop er2 (adr xy)
+    er0 = [er2],r2 = 9,rt
+    pop er2( 08 08 )
+    render_bitmap
+    pop er0
+    adr pic
+    render.ddd4
+    pop er0 (0020)
+    delay
+
+restore:
+    setlr
+    pop xr0 (adr length pr_length)
+    [er0] = er2,rt
+    pop xr0 (adr home d830)
+    BL memcpy,pop er0
+length:
+    pr_length
+set_sp:
+    pop er14 (adr home -2)
+    sp = er14,pop er14
+
+
+
+pic:
+    hex 18 18 3C E7 E7 3C 18 18

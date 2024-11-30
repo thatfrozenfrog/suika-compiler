@@ -1,0 +1,71 @@
+def 18932 memcpy_indr
+def d_E5E0 dest
+def d_E9E0 inject_adr
+def 2F5F0 getkey
+def @09846 render_bitmap
+
+org 0xE9E0
+start:
+home:
+    setlr
+    buffer_clear
+    pop er2 (adr xy)
+    er0=[er2],r2 = 9,rt
+    pop er2( 08 08 )
+render:
+    render_bitmap
+    pop er0
+    adr pic
+
+    pop er0 (30 30)
+    pop er2 (08 08)
+    render_bitmap
+    pop er0
+    adr pic2
+    render.ddd4
+    
+
+restore:
+    setlr
+    DI,RT
+    pop xr0
+    adr length
+    hex 31 30
+    [er0]=er2,rt
+    pop qr0
+    adr (addr - home)
+    adr dest
+    adr home
+    adr home -2
+    hex 32 89
+length:
+    hex 08 00 00 00
+set_sp:
+    sp = er6,pop er8
+
+addr:
+    hex 00 00
+pic:
+    hex 18 18 3C E7 E7 3C 18 18
+pic2:
+    hex FF FF FF FF FF FF FF FF
+xy:
+    hex 20 20
+
+org &start -2 ;launcher 110an
+launcher:
+    pop qr0
+    hex 01 01
+    adr inject_adr
+    adr home
+    hex 30 30
+    memcpy_indr
+    hex 30 30
+    pop qr0
+    hex 01 01
+    adr inject_adr
+    adr dest
+    adr home -2
+    memcpy_indr
+    hex 30 30
+    sp = er6,pop er8

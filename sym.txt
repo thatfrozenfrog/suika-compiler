@@ -26,7 +26,7 @@
 
 24bd6       get_string_constant
 @08c0c       fill_screen
-23DDE       waitkey
+23DDE       waitshift
 @1F24E       read_key
 
 29892       key_cvt  

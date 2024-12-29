@@ -1,0 +1,44 @@
+org 0xD500
+table:
+hex 1F FC adr left -2
+hex 1E FC adr right -2
+
+org 0xE9E0
+    setlr
+    DI,RT
+    buffer_clear
+    pop er0 ( D400 )
+    getscancode
+    pop er2 ( D400 )
+    setlr
+    er0 = [er2],r2 = 9,rt
+    pop er6 ( 01 00 )
+
+    call 10E80
+    adr table
+    hex 00 00 00 00
+
+    call 09C20
+    
+    call 1C64A
+    brk
+    call 21F74
+
+
+left:
+    macro line_print(01, 01, adr leftstr)
+    render.ddd4
+    brk
+    
+right:
+    macro line_print(01, 01, adr rightstr)
+    render.ddd4
+    
+    brk
+
+leftstr:
+    str "You pressed left"
+    hex 00
+rightstr:
+    str "You pressed right"
+    hex 00
